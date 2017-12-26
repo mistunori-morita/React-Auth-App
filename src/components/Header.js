@@ -3,6 +3,12 @@ import {Navbar, Nav, NavItem} from 'react-bootstrap';
 
 
 class Header extends Component {
+  onLoginClick(){
+    this.props.onLoginClick();
+  }
+
+
+
   render() {
     return (
       <Navbar>
@@ -12,7 +18,7 @@ class Header extends Component {
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          <NavItem href="#">Home</NavItem>
+          <NavItem onClick={this.onLoginClick.bind(this)} href="#">Home</NavItem>
         </Nav>
       </Navbar>
     );
