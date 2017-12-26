@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Auth0Lock from 'auth0-lock';
+import {Grid, Row, Col} from 'react-bootstrap';
+import Header from './components/Header';
+import Home from './components/Home';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Header />
+          <Grid>
+            <Row>
+              <Col xs={12} md={12}>
+                <Home />
+              </Col>
+            </Row>
+          </Grid>
       </div>
     );
   }
