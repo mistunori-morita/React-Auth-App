@@ -236,3 +236,160 @@ componentWillMount(){
   this.getData();
 }
 ```
+
+## logOut実装
+- src/components/Dashbordを作成
+```js
+import React, { Component } from 'react';
+
+class Dashbord extends Component {
+  render() {
+    return (
+      <div>
+        <h1>Dashbord</h1>
+        <p>welcome to the dashboard</p>
+      </div>
+    );
+  }
+}
+
+export default Dashbord;
+```
+
+- App.jsを編集
+```js
+render() {
+//lenderの中で条件分岐の変数を作ってそれを仕込むことでcomponentを分けられる
+let page;
+if(this.state.idToken){
+  page = <Dashbord />
+} else {
+  page = <Home />
+}
+
+
+  return (
+    <div className="App">
+      <Header
+        lock={this.lock}
+        idtoken={this.state.idToken}
+        profile={this.state.profile}
+         onLoginClick={this.showLock.bind(this)}/>
+        <Grid>
+          <Row>
+            <Col xs={12} md={12}>
+            //条件で分けたcomponentを呼び出す方法は{変数名}を書く
+              {page}
+            </Col>
+          </Row>
+        </Grid>
+    </div>
+  );
+}
+}
+```
+- Header.jsを編集
+```js
+import React, { Component } from 'react';
+import {Navbar, Nav, NavItem} from 'react-bootstrap';
+
+
+class Header extends Component {
+  onLoginClick(){
+    this.props.onLoginClick();
+  }
+
+  onLogoutClick(){
+    this.props.onLogoutClick();
+  }
+
+
+  render() {
+    //idTokenによってcomponentの出し分けの設定
+    let navItems;
+    if(this.props.idToken) {
+      //bootstrapのnavItemsに代入しないと使えないので注意！
+      navItems = <NavItem onClick={this.onLoginClick.bind(this)} href="#">Logout</NavItem>
+    } else {
+      navItems = <NavItem onClick={this.onLoginClick.bind(this)} href="#">Login</NavItem>
+    }
+    return (
+      <Navbar>
+        <Navbar.Header>
+          <Navbar.Brand>
+            ReactAuth App
+          </Navbar.Brand>
+        </Navbar.Header>
+        <Nav>
+        //条件分岐で分けたものを呼び出す
+          {navItems}
+        </Nav>
+      </Navbar>
+    );
+  }
+}
+
+export default Header;
+
+```
+
+- App.jsを編集
+
+```js
+//logout関数を定義し、ローカルストレージを含めて空にする
+logout(){
+  this.setState({
+    idToken: '',
+    profile: ''
+  }, () => {
+    localStorage.removeItem('idToken');
+    localStorage.removeItem('profile');
+  });
+}
+
+render() {
+  let page;
+  if(this.state.idToken){
+    //Dashbordコンポーネントに紐づける
+    page = <Dashbord
+      lock={this.lock}
+      idtoken={this.state.idToken}
+      profile={this.state.profile}
+      />
+  } else {
+    page = <Home />
+  }
+
+```
+- Dashbord.jsを編集
+```
+import React, { Component } from 'react';
+//bootstrapをインポート
+import {Grid, Row, Col} from 'react-bootstrap';
+
+
+class Dashbord extends Component {
+  render() {
+    return (
+      <div>
+        <Grid>
+          <Row>
+            <Col xs={9} md={9}>
+              <h1>Dashbord</h1>
+              <p>welcome to the dashboard</p>
+            </Col>
+            <Col xs={9} md={9}>
+              <img src={this.props.profile} role="pressentation"/>
+              <h3>{this.props.profile.nickname}</h3>
+              <strong>{this.props.profile.email}</strong>
+            </Col>
+          </Row>
+        </Grid>
+      </div>
+    );
+  }
+}
+
+export default Dashbord;
+
+```

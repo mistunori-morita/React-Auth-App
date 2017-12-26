@@ -7,9 +7,18 @@ class Header extends Component {
     this.props.onLoginClick();
   }
 
+  onLogoutClick(){
+    this.props.onLogoutClick();
+  }
 
 
   render() {
+    let navItems;
+    if(this.props.idToken) {
+      navItems = <NavItem onClick={this.onLoginClick.bind(this)} href="#">Logout</NavItem>
+    } else {
+      navItems = <NavItem onClick={this.onLoginClick.bind(this)} href="#">Login</NavItem>
+    }
     return (
       <Navbar>
         <Navbar.Header>
@@ -18,7 +27,7 @@ class Header extends Component {
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          <NavItem onClick={this.onLoginClick.bind(this)} href="#">Home</NavItem>
+          {navItems}
         </Nav>
       </Navbar>
     );
